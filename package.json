@@ -6,15 +6,17 @@
   "main": "./lib/index.js",
   "name": "@nofrills/scrubs",
   "types": "./lib/index.d.ts",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "bugs": {
     "url": "https://github.com/nativecode-dev/nofrills-scrubs/issues"
   },
   "dependencies": {
-    "@nofrills/lincoln": "^0.6.0",
+    "@nofrills/collections": "^0.6.1",
+    "@nofrills/lincoln": "^0.6.2",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "@nofrills/lincoln": "^0.6.2",
     "@types/lodash": "^4.14.67",
     "@types/node": "^8.0.2",
     "chai": "^4.0.2",
@@ -39,8 +41,8 @@
     "prestart": "npm run build",
     "test": "cross-env DEBUG= nyc mocha tests/",
     "pretest": "npm run build",
-    "prepublish": "npm run test",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "push": "npm publish --access public"
+    "push": "npm publish --access public",
+    "prepush": "npm run test"
   }
 }
