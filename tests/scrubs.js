@@ -1,20 +1,26 @@
 const expect = require('chai').expect
 const scrubs = require('../lib')
 
-const root = {
-  apikey: '<SECRET>',
-  url: 'https://nobody:s4p3rs3cr3t@nowhere.com/?apikey=SECRET&password=s4p3rs3cr3t',
-  user: {
-    email: 'nobody@nowhere.com',
-    password: 's4p3rs3cr3t',
-  },
-  strings: [
-    'https://nobody:s4p3rs3cr3t@nowhere.com/?apikey=SECRET&password=s4p3rs3cr3t'
-  ]
-}
-
 describe('when using scrubs', () => {
+  const root = require('./artifacts/data.json')
+
   describe('the "scrub" function', () => {
+    it('should echo null', () => {
+      const sut = scrubs.scrub(null)
+      expect(sut).to.be.null
+    })
+
+    it('should echo undefined', () => {
+      const sut = scrubs.scrub(undefined)
+      expect(sut).to.be.undefined
+    })
+
+    it('should echo array', () => {
+      const array = []
+      const sut = scrubs.scrub(array)
+      expect(sut).to.be.instanceOf(Array)
+    })
+
     it('should echo boolean', () => {
       const bool = true
       const sut = scrubs.scrub(bool)
@@ -54,10 +60,11 @@ describe('when using scrubs', () => {
 
   describe('that has protected properties', () => {
     it('should replace property with secured option', () => {
+      const expected_url = 'https://nobody:<secured>@nowhere.com/?apikey=<secured>&password=<secured>'
       const sut = scrubs.scrub(root)
       expect(sut.user.email).to.equal(root.user.email)
       expect(sut.user.password).to.equal('<secured>')
-      expect(sut.strings).to.deep.equal(['https://nobody:<secured>@nowhere.com/?apikey=<secured>&password=<secured>'])
+      expect(sut.strings).to.deep.equal([expected_url])
     })
   })
 })
